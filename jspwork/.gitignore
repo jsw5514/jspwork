@@ -1,0 +1,73 @@
+### Build & Gradle ###
+.gradle
+**/build/
+!src/**/build/
+gradle-app.setting
+.gradletasknamecache
+
+# Gradle wrapper (keep jar & properties)
+!gradle/wrapper/gradle-wrapper.jar
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+out/
+.idea_modules/
+
+# Plugin caches & configs
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+.idea/**/dataSources*
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/mongoSettings.xml
+.idea/replstate.xml
+.idea/sonarlint/
+.idea/**/sonarIssues.xml
+.idea/**/markdown-navigator*
+.idea/$CACHE_FILE$
+.idea/codestream.xml
+.idea/**/azureSettings.xml
+.idea/httpRequests
+.idea/caches/build_file_checksums.ser
+
+# Crashlytics
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+### VS Code ###
+.vscode/
+
+### OS & Misc ###
+.DS_Store
+
+### Java ###
+*.class
+*.log
+*.ctxt
+.mtj.tmp/
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+*.hprof
+
+### CMake (optional, in case you use it) ###
+cmake-build-*/
