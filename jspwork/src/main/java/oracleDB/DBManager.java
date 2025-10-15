@@ -12,7 +12,15 @@ import java.util.*;
  * <h3>DB 관리자 클래스</h3>
  * <b>이름:</b> DBManager<hr>
  * <b>설명:</b> JDBC 기반으로 SQL 쿼리를 실행시키는 클래스<br>
- *      현재 Oracle DB만 지원(리소스 하드코딩됨), HikariCP 기반 커넥션풀 사용<hr>
+ *      DB 정보는 config.properties 파일에서 불러옴<br>
+ *      <p style="color: #FBCEB1">
+ *          <b>필요한 프로퍼티</b><br>
+ *          db.driverClassName = JDBC 드라이버 클래스<br>
+ *          db.url = DB URL <br>
+ *          db.username = DB 계정 유저명<br>
+ *          db.password = DB 계정 비밀번호<br>
+ *      </p>
+ *      <hr>
  * <b>의존성(Gradle Kotlin DSL 기준, 버전명은 유동적으로 사용할것):</b><hr>
  *      //Oracle JDBC 드라이버<br>
  *      implementation("com.oracle.database.jdbc:ojdbc8:19.17.0.0")<br><hr>
