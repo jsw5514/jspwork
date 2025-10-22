@@ -33,6 +33,11 @@
     <br>
 
     <h4>2. JSTL Formatting Library</h4>
-    <p>숫자, 날짜 및 시간 데이터의 출력 형식을 지정하는</p>
+    <p>숫자, 날짜 및 시간 데이터의 출력 형식을 지정할때 사용하는 문법을 제공</p>
+    <a href="${pageContext.request.contextPath}/views/2_customAction/02.fmt.jsp">fmt library</a>
+
+    <h4>3. JSTL Function Library</h4>
+    <p>함수?</p>
+    <a href="${pageContext.request.contextPath}/views/2_customAction/03.fn.jsp">이동</a>
 </body>
 </html>

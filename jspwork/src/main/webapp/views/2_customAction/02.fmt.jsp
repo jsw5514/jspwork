@@ -44,9 +44,8 @@
         <li>Medium : <fmt:formatDate value="${current}" type="both" dateStyle="medium" timeStyle="medium"/></li>
         <li>Long : <fmt:formatDate value="${current}" type="both" dateStyle="long" timeStyle="long"/></li>
         <li>Full : <fmt:formatDate value="${current}" type="both" dateStyle="full" timeStyle="full"/></li>
+        <li>Short : <fmt:formatDate value="${current}" type="both" dateStyle="short" timeStyle="short"/></li>
+        <li>Custom : <fmt:formatDate value="${current}" type="both" pattern="yyyy-mm-dd(E) hh:mm:ss(a)"/></li><!--HH면 24시간 기준, hh면 12시간 기준-->
     </ul>
-
-    
-    
 </body>
 </html>
