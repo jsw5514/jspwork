@@ -2,34 +2,51 @@ package ch10_board;
 
 import oracleDB.DBManager;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
 
 public class BoardDAO {
-    //게시글 목록
-    public List<BoardItem> getBoardItems(int startNum) {
+    //게시글 검색 결과 or 검색 없는 그냥 목록
+    public List<BoardItem> getBoardItems(String keyField, String keyWord, int start, int end) {
         DBManager db = new DBManager();
+        final String sql;
 
-        List<Map<String, Object>> resultList = 
-                db.executeSelect("select * from board where num>=? and num<? order by num desc", startNum, startNum + 20);
+        List<Map<String, Object>> resultList;
+        if(keyField.isEmpty()){ //검색없이 전체 리스트 표시
+            sql = "select * " +
+                    "from (select ROWNUM as RNUM, BT1.* " +
+                           "from (select * " +
+                                 "from board " +
+                                 "order by ref desc, pos) " +
+                            "BT1) " +
+                    "where RNUM between ? and ?";
+            resultList = db.executeSelect(sql, start, end);
+        }
+        else{ //검색 결과 리스트 표시
+            if(isInvalidKeyField(keyField))
+                throw new IllegalArgumentException(keyField + " is not valid");
+            sql = "select * " + 
+                    "from (select ROWNUM as RNUM, BT1.* " +
+                           "from (select * " +
+                                  "from board " +
+                                  "order by ref desc, pos) " +
+                            "BT1 " +
+                            "where " + keyField + " like ?) " +
+                    "where RNUM between ? and ?";
+            resultList = db.executeSelect(sql, keyWord, start, end);
+        }
         return parseBoardItemsFrom(resultList);
     }
-    
-    //게시글 검색 결과
-    public List<BoardItem> getBoardItems(String keyField, String keyWord) {
+
+    private boolean isInvalidKeyField(String keyField) {
         final Set<String> VALID_KEYFIELDS = Collections.unmodifiableSet(Set.of("name","subject","content"));
         //injection 방지(유효한 keyField만 쿼리에 삽입)
         if(!VALID_KEYFIELDS.contains(keyField)) {
-            throw new IllegalArgumentException(keyField + " is not valid");
+            return true;
         }
-        
-        DBManager db = new DBManager();
-        List<Map<String, Object>> resultList = db.executeSelect(
-                String.format("select * from board where %s like ? order by num desc",keyField), "%"+keyWord+"%");
-        return parseBoardItemsFrom(resultList);
+        return false;
     }
-    
+
     //게시글 1개의 조회수 증가
     public boolean upCount(int num){
         DBManager db = new DBManager();
@@ -74,6 +91,22 @@ public class BoardDAO {
             boardItems.add(boardItem);
         }
         return boardItems;
+    }
+
+    public int getTotalRecord(String keyWord, String keyField) {
+        int totalRecord = 0;
+        DBManager db = new DBManager();
+        List<Map<String, Object>> result;
+        if(keyWord==null||keyWord.isEmpty()) {
+            result = db.executeSelect("select count(num) as count from board");
+        }
+        else{
+            if(isInvalidKeyField(keyField))
+                throw new IllegalArgumentException(keyField + " is not valid");
+            result = db.executeSelect("select count(num) as count from board where "+keyField+"  like ?", "%"+keyWord+"%");
+        }
+        totalRecord = ((Number)result.get(0).get("COUNT")).intValue();
+        return totalRecord;
     }
     
     //게시글 1개 상세정보 파싱

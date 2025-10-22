@@ -1,0 +1,11 @@
+@charset "UTF-8";
+* {margin: 0 auto;}
+div {width:800px;}
+h2, h5, th, .cen {text-align:center; }
+a {text-decoration:none; color:black; cursor:pointer;}
+.m50 {margin-top:50px;}
+.m30 {margin-top:30px;}
+.ques {width:600px;}
+.voteForm {width:400px;}
+.view {width:500px;}
+.right-align {text-align: right;}

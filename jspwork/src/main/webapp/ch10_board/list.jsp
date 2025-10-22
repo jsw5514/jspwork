@@ -9,23 +9,54 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:useBean id="boardDao" class="ch10_board.BoardDAO"/>
 <%
-    List<BoardItem> boardItemList = null;
+    int totalRecord = 0;    //총 레코드 수(총 게시글 수)
+    int numPerPage = 10;    //페이지 당 레코드수([1]로 표현되는 페이지 하나)
+    int pagePerBlock = 5;   //블록 당 페이지수([1][2]...[5]로 표현되는 묶음 1개)
+    
+    int totalPage = 0;      //총 페이지 수
+    int totalBlock = 0;     //총 블록 수
+    
+    int nowPage = 1;        //현재 페이지 번호
+    int nowBlock = 1;       //현재 블록 번호
+    
+    int start = 0;          //DB에서 select 시작번호
+    int end = 0;            //DB에서 select 끝번호
+    int listSize = 0;       //현재 읽어온 레코드 수
+
+
     String keyWord = request.getParameter("keyWord");
     String keyField = request.getParameter("keyField");
-    if(keyWord !=null){
-        boardItemList = boardDao.getBoardItems(keyField,keyWord);
-    }
-    else {
-        String pageNumStr = request.getParameter("page");
-        int pageNum = Integer.parseInt(pageNumStr != null ? pageNumStr : "1");
-        boardItemList = boardDao.getBoardItems(pageNum);
-    }
+    keyWord = keyWord==null?"":keyWord;
+    keyField = keyField==null?"":keyField;
     
-    int nowPage = 1;
+    totalRecord = boardDao.getTotalRecord(keyWord,keyField);
+    totalPage = (int) Math.ceil((double) totalRecord / numPerPage);
+    totalBlock = (int) Math.ceil((double) totalPage / pagePerBlock);
+    nowBlock = (int)Math.ceil((double) nowPage / pagePerBlock);
+    
+    /*
+    페이지 계산식 설명
+    start 계산
+    nowPage는 현재 페이지 번호, numPerPage는 페이지 당 게시글 수이다.
+    nowPage는 1로 시작하는 index(1-based index)로 직관적으로 생각했을때 numPerPage와 곱하면 현재 페이지의 게시글 번호가 나온다.
+    하지만 nowPage가 1로 시작하므로(1-base라서) 첫 페이지의 첫 게시글이 numPerPage만큼 벌어지는 오차가 생긴다.
+    ex) nowPage=1, numPerPage=10이면 첫 페이지의 첫 게시글 번호는 nowPage * numPerPage = 10이 된다.
+    nowPage에서 1을 빼서 0으로 시작하는 인덱스를 얻어야 게시글의 0-base index를 얻을 수 있다.
+    하지만 게시글은 1-base index로 관리하므로 여기서 다시 1을 더해야 게시글의 1-base index를 얻을 수 있는 것이다.
+    
+    end 계산
+    페이지의 마지막 게시글 번호는 start~end까지의 게시글 갯수가 numPerPage와 같게 계산하면 된다.
+    ex) nowPage=1, numPerPage=10이면 1 + 10 - 1 = 10  즉, 1~10번까지 총 10개의 게시글을 가져오게 된다.
+     */
+    start = (nowPage-1) * numPerPage + 1; 
+    end = start + numPerPage - 1;
+    
     if(request.getParameter("reload") != null){
         keyField = "";
-        keyWord="";
+        keyWord = "";
     }
+    
+    List<BoardItem> boardItemList = boardItemList = boardDao.getBoardItems(keyField, keyWord, start, end);
 %>
 <script>
     function list(){
@@ -70,7 +101,7 @@
     <h1>JSPBoard</h1>
     <table>
         <tr>
-            <th colspan="5">Total: </th>
+            <th colspan="5">Total: <%=totalRecord%>Articles(<%=nowPage%>/<%=totalPage%>Pages)</th>
         </tr>
         <tr>
             <th>번호</th>

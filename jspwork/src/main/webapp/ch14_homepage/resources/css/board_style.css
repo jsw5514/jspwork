@@ -1,0 +1,8 @@
+@charset "UTF-8";
+* {margin: 0 auto;}
+.list {width:800px;}
+a {text-decoration:none; color:black; cursor:pointer;}
+h2, h5, th, .cen {text-align:center; }
+.m50 {margin-top:50px;}
+.m30 {margin-top:30px;}
+.right-align {text-align: right;}

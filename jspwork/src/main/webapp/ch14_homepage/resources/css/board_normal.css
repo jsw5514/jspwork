@@ -1,0 +1,5 @@
+@charset "UTF-8";
+table{width:550px; margin-top: 50px;}
+th{height:40px;}
+td{height:34px;}
+a {text-decoration:none; color:black; cursor:pointer;}
